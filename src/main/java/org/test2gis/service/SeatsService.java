@@ -2,6 +2,7 @@ package org.test2gis.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.test2gis.model.dto.SeatForBookDto;
 import org.test2gis.model.entity.Seat;
 import org.test2gis.model.repository.SeatRepository;
 
@@ -16,5 +17,9 @@ public class SeatsService {
 
   public List<Seat> getSeats() {
     return seatRepository.findAll();
+  }
+
+  public List<SeatForBookDto> bookSeats(List<SeatForBookDto> seatForBookDtoList) {
+    return  seatRepository.bookAll(seatForBookDtoList);
   }
 }

@@ -45,9 +45,13 @@ public class H2Database {
   }
 
   @SneakyThrows
-  public List<Map<String, Object>> getData(String select, List<SqlColProfile> sqlColMetadataList) {
+  public List<Map<String, Object>> getData(String select, Map<String, Object> parameters) {
     PreparedStatement ps = connection.prepareStatement(select);
     ResultSet rs = ps.executeQuery();
+
+    List<SqlColProfile> sqlColMetadataList = getSqlColMetadataList(rs.getMetaData());
+
+    parameters.forEach((key, value) -> {});
 
     List<Map<String, Object>> rows = new ArrayList<>();
 
@@ -69,8 +73,6 @@ public class H2Database {
 
   @SneakyThrows
   public List<SqlColProfile> loadSqlColMetadataList(String select) {
-    List<SqlColProfile> sqlColMetadataList = new ArrayList<>();
-
     Statement s;
     ResultSet rs;
     ResultSetMetaData rsmd;
@@ -80,20 +82,24 @@ public class H2Database {
     rs = s.getResultSet();
     rsmd = rs.getMetaData();
 
+    return getSqlColMetadataList(rsmd);
+  }
+
+  @SneakyThrows
+  private List<SqlColProfile> getSqlColMetadataList(ResultSetMetaData rsmd) {
+    List<SqlColProfile> sqlColMetadataList = new ArrayList<>();
+
     for (int i = 1; i <= rsmd.getColumnCount(); i++) {
       sqlColMetadataList.add(i - 1,
-      SqlColProfile.builder()
-          .colId(i-1)
-          .colIdSql(i)
-          .colName(rsmd.getColumnName(i).toUpperCase())
-          .colDbTypeName(rsmd.getColumnTypeName(i).toUpperCase())
-          .colSizeDisplay(rsmd.getColumnDisplaySize(i))
-          .colSizeSqlType(rsmd.getColumnType(i))
-          .build());
+          SqlColProfile.builder()
+              .colId(i-1)
+              .colIdSql(i)
+              .colName(rsmd.getColumnName(i).toUpperCase())
+              .colDbTypeName(rsmd.getColumnTypeName(i).toUpperCase())
+              .colSizeDisplay(rsmd.getColumnDisplaySize(i))
+              .colSizeSqlType(rsmd.getColumnType(i))
+              .build());
     }
-
-    rs.close();
-    s.close();
 
     return sqlColMetadataList;
   }

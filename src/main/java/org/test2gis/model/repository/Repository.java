@@ -2,7 +2,7 @@ package org.test2gis.model.repository;
 
 import java.util.List;
 
-public interface Repository<T, ID> {
+public interface Repository<T, DTO, ID> {
   List<T> findAll();
-  <S extends T> List<S> saveAll(Iterable<S> var1);
+  <S extends DTO> List<S> bookAll(Iterable<S> var1);
 }

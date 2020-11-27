@@ -15,6 +15,18 @@
 1. Скомпилировать и собрать проект: mvn clean package
 2. Запустить создание образов и контейнеров приложения, БД в Docker: docker-compose up -d
 3. В браузере получить полный список мест со статусами бронирования: http://localhost:8888/seats
+4. Для бронирования мест использовать put метод по url: http://localhost:8888/seats с телом:
+
+_`[
+    {
+      "id": 1,
+      "booking": true
+    },
+	{
+      "id": 2,
+      "booking": true
+    }
+]`_
 
 ## Лицензия
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
